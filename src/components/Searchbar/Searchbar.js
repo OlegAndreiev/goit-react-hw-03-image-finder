@@ -1,18 +1,24 @@
-import React, { Children } from 'react';
+import React from 'react';
 // import PropTypes from 'prop-types';
 import css from './Searchbar.module.css';
+import { BsSearch } from 'react-icons/bs';
 
-const Searchbar = () => (
- <div className={css.Searchbar}>
-    <div className={css.SearchForm}>
-  <input className={css.SearchFormInput}>
-    <button type='submit' className={css.SearchFormButton}></button>
-        </input>
+const Searchbar = ({}) => (
+  <header className={css.Searchbar}>
+    <form className={css.SearchForm}>
+      <button className={css.SearchFormButton} type="submit">
+        <BsSearch className={css.SearchFormButtonIcon} />
+      </button>
 
-    </div>
-      
-    </div>
-
+      <input
+        className={css.SearchFormInput}
+        type="text"
+        autocomplete="off"
+        autofocus
+        placeholder="Search images and photos"
+      ></input>
+    </form>
+  </header>
 );
 
 export default Searchbar;

@@ -1,25 +1,20 @@
 import React from 'react';
-import Searchbar from '../components/Searchbar';
+// import Searchbar from '../components/Searchbar';
+import Searchbar from './Searchbar/Searchbar';
 // import PropTypes from 'prop-types';
-
-
 
 class App extends React.Component {
   state = {
     // contacts: [],
     // filter: '',
   };
-  
-  render() {
 
+  render() {
     return (
-      <div>
-      <h1>OOO</h1>
-      <Searchbar/>
-      </div>
-      
-    
-      )
+      <>
+        <Searchbar />
+      </>
+    );
   }
 }
 
@@ -29,4 +24,3 @@ export default App;
 //   contacts: PropTypes.array,
 //   filter: PropTypes.string,
 // };
-
