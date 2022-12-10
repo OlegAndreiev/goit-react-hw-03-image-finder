@@ -24,9 +24,9 @@ class App extends React.Component {
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        {/* <ImageGallery>
-        </ImageGallery> */}
-        <ImageGalleryItem searchedName={searchedName} />
+        <ImageGallery searchedName={searchedName}>
+          {/* <ImageGalleryItem /> */}
+        </ImageGallery>
         {/* <Button />
         <Loader />
         <Modal /> */}
