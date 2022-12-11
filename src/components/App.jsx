@@ -24,8 +24,6 @@ class App extends React.Component {
   };
 
   changePagePagination = morePage => {
-    console.log(morePage);
-    console.log(this.state.page);
     this.setState({
       page: morePage,
     });
@@ -36,6 +34,11 @@ class App extends React.Component {
   //   this.setState({
   //     data: dataInput,
   //   });
+  // };
+  // closeModal = () => {
+  //   this.setState(() => ({
+  //     showModal: false,
+  //   }));
   // };
 
   toggleModal = () => {
@@ -49,11 +52,11 @@ class App extends React.Component {
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
+
         <ImageGallery
           searchedName={searchedName}
           page={page}
           onToggleModal={this.toggleModal}
-          // data={this.dataInput}
         >
           {/* {data.map(el => (
             <ImageGalleryItem
