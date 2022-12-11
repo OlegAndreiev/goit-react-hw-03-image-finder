@@ -13,23 +13,32 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends React.Component {
   state = {
     searchedName: '',
+    page: 1,
   };
 
   formSubmitHandler = searchedName => {
     this.setState({ searchedName });
   };
 
+  changePagePagination = morePage => {
+    console.log(morePage);
+    console.log(this.state.page);
+    this.setState({
+      page: morePage,
+    });
+  };
+
   render() {
-    const { searchedName } = this.state;
+    const { searchedName, page } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGallery searchedName={searchedName}>
+        <ImageGallery searchedName={searchedName} page={page}>
           {/* <ImageGalleryItem /> */}
         </ImageGallery>
-        {/* <Button />
-        <Loader />
-        <Modal /> */}
+        <Button onClick={this.changePagePagination} />
+        {/* <Loader /> */}
+        {/* <Modal /> */}
         <ToastContainer autoClose={3000} />
       </>
     );

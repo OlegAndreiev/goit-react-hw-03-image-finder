@@ -7,10 +7,10 @@ import css from './ImageGallery.module.css';
 class ImageGallery extends React.Component {
   state = {
     searchedName: this.props.searchedName,
-    id: '',
-    webformatURL: '',
-    largeImageURL: '',
-    tags: '',
+    // id: '',
+    // webformatURL: '',
+    // largeImageURL: '',
+    // tags: '',
     data: [],
   };
   responceDataInput = responce => {
@@ -27,10 +27,11 @@ class ImageGallery extends React.Component {
     const API_KEY = '30800366-aecfdce11bab1e79da5c222a8';
     const prevName = prevProps.searchedName;
     const newName = this.props.searchedName;
+    const currentPage = this.props.page;
 
     if (prevName !== newName) {
       fetch(
-        `${BASE_URL}?q=${newName}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+        `${BASE_URL}?q=${newName}&${currentPage}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(responce => responce.json())
         .then(data => this.responceDataInput(data));
