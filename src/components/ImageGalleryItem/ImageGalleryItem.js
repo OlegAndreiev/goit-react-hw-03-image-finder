@@ -40,10 +40,32 @@ class ImageGalleryItem extends React.Component {
   //   }
   // }
 
+  state = {
+    showModal: false,
+  };
+  // toggleModal = props => {
+  //   console.log(props);
+  //   // this.setState(() => ({
+  //   //   showModal: !showModal,
+  //   // }));
+  // };
+
+  handleToggleModal = () => {
+    // console.log(event.currentTarget);
+    // this.setState({
+    //   showModal: true,
+    // });
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+    this.props.showModal(this.state.showModal);
+    // this.props.toggleModal(this.state.showModal);
+  };
+
   render() {
     // console.log(this.props);
     return (
-      <li className={css.ImageGalleryItem}>
+      <li onClick={this.handleToggleModal} className={css.ImageGalleryItem}>
         {/* {this.state.loading && <div>Зугружаем</div>} */}
         <img
           className={css.ImageGalleryItemImage}
@@ -55,6 +77,20 @@ class ImageGalleryItem extends React.Component {
   }
 }
 export default ImageGalleryItem;
+
+// export default function ImageGalleryItem(props) {
+//   // console.log(props);
+//   return (
+//     <li className={css.ImageGalleryItem}>
+//       {/* {this.state.loading && <div>Зугружаем</div>} */}
+//       <img
+//         className={css.ImageGalleryItemImage}
+//         src={props.webformatURL}
+//         alt={props.tags}
+//       />
+//     </li>
+//   );
+// }
 
 // Searchbar.propTypes = {
 //   value: PropTypes.string.isRequired,
