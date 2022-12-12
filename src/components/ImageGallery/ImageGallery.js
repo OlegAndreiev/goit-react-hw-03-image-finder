@@ -36,6 +36,10 @@ class ImageGallery extends React.Component {
   //   this.props.onToggleModal(this.state.showModal);
   // };
 
+  setActiveImgIdx = idx => {
+    console.log(idx);
+  };
+
   render() {
     const { data, error } = this.props;
 
@@ -44,7 +48,7 @@ class ImageGallery extends React.Component {
         {error && <h1>{error.message}</h1>}
         {data && (
           <ul className={css.ImageGallery}>
-            {data.map(el => (
+            {data.map((el, idx) => (
               <ImageGalleryItem
                 key={el.id}
                 id={el.id}
@@ -52,6 +56,7 @@ class ImageGallery extends React.Component {
                 largeImageURL={el.largeImageURL}
                 tags={el.tags}
                 showModal={this.props.showModal}
+                onClick={() => this.setActiveImgIdx(idx)}
               />
             ))}
             {/* {children} */}

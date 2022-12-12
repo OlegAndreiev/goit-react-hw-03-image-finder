@@ -18,6 +18,7 @@ class App extends React.Component {
     error: null,
     showModal: false,
     id: '',
+    activeImgId: 0,
   };
 
   formSubmitHandler = searchedName => {
@@ -63,11 +64,24 @@ class App extends React.Component {
       showModal: !showModal,
     }));
     console.log(this.state);
-    console.log(event.currentTarget.id);
-    // this.forModalId(event.currentTarget.id);
-    this.state.data.find(data => data.id === event.currentTarget.id) &&
-      console.log('ok');
+    console.log(this.state.data[0]);
+    // console.log(event.currentTarget.id);
+    this.setState({ activeImgId: event.currentTarget.id });
+    // this.state.data.find(img => this.state.data.id === this.state.activeImgId);
+  this.state.data.filter(data => )
   };
+
+  filteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  // setActiveImgIdx = idx => {
+  //   console.log(idx);
+  // };
 
   componentDidUpdate(prevProps, prevState) {
     const BASE_URL = 'https://pixabay.com/api/';
@@ -109,6 +123,7 @@ class App extends React.Component {
 
   render() {
     const { searchedName, page, showModal, data, error } = this.state;
+    const { idx } = this.props;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
@@ -118,6 +133,7 @@ class App extends React.Component {
           data={data}
           error={error}
           showModal={this.toggleModal}
+          // setActiveImgIdx={this.setActiveImgIdx(idx)}
         />
 
         {data && <Button onClick={this.changePagePagination} />}
