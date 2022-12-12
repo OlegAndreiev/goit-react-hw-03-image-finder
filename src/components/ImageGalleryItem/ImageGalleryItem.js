@@ -40,9 +40,9 @@ class ImageGalleryItem extends React.Component {
   //   }
   // }
 
-  state = {
-    showModal: false,
-  };
+  // state = {
+  //   showModal: false,
+  // };
   // toggleModal = props => {
   //   console.log(props);
   //   // this.setState(() => ({
@@ -50,47 +50,34 @@ class ImageGalleryItem extends React.Component {
   //   // }));
   // };
 
-  handleToggleModal = () => {
-    // console.log(event.currentTarget);
-    // this.setState({
-    //   showModal: true,
-    // });
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-    this.props.showModal(this.state.showModal);
-    // this.props.toggleModal(this.state.showModal);
-  };
+  // handleToggleModal = () => {
+  //   // console.log(event.currentTarget);
+  //   // this.setState({
+  //   //   showModal: true,
+  //   // });
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //   }));
+  //   this.props.showModal(this.state.showModal);
+  //   // this.props.toggleModal(this.state.showModal);
+  // };
 
   render() {
-    // console.log(this.props);
+    const { webformatURL, tags, id, showModal } = this.props;
+
     return (
-      <li onClick={this.handleToggleModal} className={css.ImageGalleryItem}>
-        {/* {this.state.loading && <div>Зугружаем</div>} */}
+      <li id={id} className={css.ImageGalleryItem} onClick={showModal}>
         <img
           className={css.ImageGalleryItemImage}
-          src={this.props.webformatURL}
-          alt={this.props.tags}
+          src={webformatURL}
+          alt={tags}
         />
       </li>
     );
   }
 }
-export default ImageGalleryItem;
 
-// export default function ImageGalleryItem(props) {
-//   // console.log(props);
-//   return (
-//     <li className={css.ImageGalleryItem}>
-//       {/* {this.state.loading && <div>Зугружаем</div>} */}
-//       <img
-//         className={css.ImageGalleryItemImage}
-//         src={props.webformatURL}
-//         alt={props.tags}
-//       />
-//     </li>
-//   );
-// }
+export default ImageGalleryItem;
 
 // Searchbar.propTypes = {
 //   value: PropTypes.string.isRequired,

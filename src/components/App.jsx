@@ -1,7 +1,6 @@
 import React from 'react';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
-import ImageGalleryItem from './ImageGalleryItem';
 import Button from './Button';
 import Loader from './Loader';
 import Modal from './Modal';
@@ -14,9 +13,11 @@ import 'react-toastify/dist/ReactToastify.css';
 class App extends React.Component {
   state = {
     searchedName: '',
-    // data: [],
+    data: null,
     page: 1,
+    error: null,
     showModal: false,
+    id: '',
   };
 
   formSubmitHandler = searchedName => {
@@ -27,6 +28,17 @@ class App extends React.Component {
     this.setState({
       page: morePage,
     });
+  };
+  responceDataInput = responce => {
+    this.setState({
+      data: responce.hits,
+    });
+  };
+
+  paginationDataInput = responce => {
+    this.setState(prevState => ({
+      data: [...prevState.data, ...responce.hits],
+    }));
   };
 
   // dataInput = dataInput => {
@@ -41,33 +53,74 @@ class App extends React.Component {
   //   }));
   // };
 
-  toggleModal = () => {
+  //  contacts.find(contact => contact.name === name)
+  //       this.setState({
+  //           contacts: [...contacts, { id: id, name: name, number: number }],
+  //         });
+
+  toggleModal = event => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
+    console.log(this.state);
+    console.log(event.currentTarget.id);
+    // this.forModalId(event.currentTarget.id);
+    this.state.data.find(data => data.id === event.currentTarget.id) &&
+      console.log('ok');
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    const BASE_URL = 'https://pixabay.com/api/';
+    const API_KEY = '30800366-aecfdce11bab1e79da5c222a8';
+    const prevName = prevState.searchedName;
+    const newName = this.state.searchedName;
+    const currentPage = this.state.page;
+    const prevPage = prevState.page;
+    const newPage = this.state.page;
+
+    if (prevName !== newName) {
+      fetch(
+        `${BASE_URL}?q=${newName}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      )
+        .then(responce => {
+          if (responce.ok) {
+            return responce.json();
+          }
+
+          return Promise.reject(new Error('Something has gone wrong!'));
+        })
+        .catch(error => this.setState({ error }))
+        .then(data => this.responceDataInput(data));
+    }
+    if (prevPage !== newPage) {
+      fetch(
+        `${BASE_URL}?q=${newName}&page=${currentPage}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      )
+        .then(responce => {
+          if (responce.ok) {
+            return responce.json();
+          }
+          return Promise.reject(new Error('Something has gone wrong!'));
+        })
+        .catch(error => this.setState({ error }))
+        .then(data => this.paginationDataInput(data));
+    }
+  }
+
   render() {
-    const { searchedName, page, showModal } = this.state;
+    const { searchedName, page, showModal, data, error } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
 
         <ImageGallery
           searchedName={searchedName}
-          page={page}
-          onToggleModal={this.toggleModal}
-        >
-          {/* {data.map(el => (
-            <ImageGalleryItem
-              key={el.id}
-              webformatURL={el.webformatURL}
-              tags={el.tags}
-            />
-          ))} */}
-        </ImageGallery>
-        {/* <ImageGalleryItem toggleModal={this.toggleModal} /> */}
-        <Button onClick={this.changePagePagination} />
+          data={data}
+          error={error}
+          showModal={this.toggleModal}
+        />
+
+        {data && <Button onClick={this.changePagePagination} />}
         {/* <Loader /> */}
         {showModal && (
           <Modal onClose={this.toggleModal}>
