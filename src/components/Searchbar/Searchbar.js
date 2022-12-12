@@ -16,17 +16,20 @@ class Searchbar extends React.Component {
   };
 
   handleSubmit = event => {
+    const form = event.currentTarget
     event.preventDefault();
     if (this.state.searchedName === '') {
       toast.error('Search field should not be empty!');
       return;
     }
     this.props.onSubmit(this.state.searchedName);
+    form.reset();
     this.reset();
   };
 
   reset = () => {
     this.setState({ searchedName: '' });
+    
   };
 
   render() {

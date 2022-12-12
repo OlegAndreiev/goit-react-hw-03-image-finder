@@ -15,14 +15,14 @@ class App extends React.Component {
     page: 1,
     loading: false,
     error: null,
-    noData: null,
-    noNewData: null,
+    noData: false,
+    noNewData: false,
     showModal: false,
     id: '',
     activeImgIdx: null,
   };
   reset = () => {
-    this.setState({ data: null, noData: null, noNewData: null });
+    this.setState({ data: null, noData: false, noNewData: false });
   };
 
   formSubmitHandler = searchedName => {
@@ -37,12 +37,17 @@ class App extends React.Component {
   };
 
   responceDataInput = responce => {
-    if (responce.total === 0) {
+    if ( responce.total < 12 && responce.total > 0) {
+      this.setState({
+        noNewData: true,
+      });
+    }
+    if ( responce.total === 0 ) {
       this.setState({
         noData: true,
       });
     }
-    if (responce.total !== 0) {
+    if (responce.total) {
       this.setState({
         data: responce.hits,
         noData: false,
@@ -51,7 +56,6 @@ class App extends React.Component {
   };
 
   paginationDataInput = responce => {
-    console.log(responce.total);
 
     this.setState(prevState => ({
       data: [...prevState.data, ...responce.hits],
@@ -143,7 +147,7 @@ class App extends React.Component {
           </div>
         )}
         {loading && <Loader />}
-        {data && !loading && !noData && !noNewData && (
+        {data && !loading && !noNewData && (
           <Button onClick={this.changePagePagination} />
         )}
         {showModal && (
