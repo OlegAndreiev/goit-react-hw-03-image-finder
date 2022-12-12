@@ -162,8 +162,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// App.propTypes = {
-//   contacts: PropTypes.array,
-//   filter: PropTypes.string,
-// };
