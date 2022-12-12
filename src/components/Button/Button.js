@@ -1,25 +1,17 @@
 import React from 'react';
 import css from './Button.module.css';
+import PropTypes from 'prop-types';
 
-class Button extends React.Component {
-  state = {
-    //   page: this.props.onClick,
-    page: 2,
-  };
-  loadMoreBtn = props => {
-    console.log(props);
-    this.props.onClick(this.state.page);
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-  };
+const Button = ({ onClick }) => (
+  <div className={css.ButtonOverlay}>
+    <button type="button" className={css.Button} onClick={onClick}>
+      Load more
+    </button>
+  </div>
+);
 
-  render() {
-    return (
-      <button type="button" className={css.Button} onClick={this.loadMoreBtn}>
-        Load more
-      </button>
-    );
-  }
-}
 export default Button;
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};

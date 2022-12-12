@@ -8,80 +8,70 @@ import css from '../components/Modal/Modal.module.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// import PropTypes from 'prop-types';
-
 class App extends React.Component {
   state = {
     searchedName: '',
     data: null,
     page: 1,
+    loading: false,
     error: null,
+    noData: null,
+    noNewData: null,
     showModal: false,
     id: '',
-    activeImgId: 0,
+    activeImgIdx: null,
+  };
+  reset = () => {
+    this.setState({ data: null, noData: null, noNewData: null });
   };
 
   formSubmitHandler = searchedName => {
+    this.reset();
     this.setState({ searchedName });
   };
 
-  changePagePagination = morePage => {
-    this.setState({
-      page: morePage,
-    });
+  changePagePagination = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
+
   responceDataInput = responce => {
-    this.setState({
-      data: responce.hits,
-    });
+    if (responce.total === 0) {
+      this.setState({
+        noData: true,
+      });
+    }
+    if (responce.total !== 0) {
+      this.setState({
+        data: responce.hits,
+        noData: false,
+      });
+    }
   };
 
   paginationDataInput = responce => {
+    console.log(responce.total);
+
     this.setState(prevState => ({
       data: [...prevState.data, ...responce.hits],
     }));
+    if (responce.total < 12) {
+      this.setState({
+        noNewData: true,
+      });
+    }
   };
 
-  // dataInput = dataInput => {
-  //   console.log(dataInput);
-  //   this.setState({
-  //     data: dataInput,
-  //   });
-  // };
-  // closeModal = () => {
-  //   this.setState(() => ({
-  //     showModal: false,
-  //   }));
-  // };
-
-  //  contacts.find(contact => contact.name === name)
-  //       this.setState({
-  //           contacts: [...contacts, { id: id, name: name, number: number }],
-  //         });
-
-  toggleModal = event => {
+  toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
-    console.log(this.state);
-    console.log(this.state.data[0]);
-    // console.log(event.currentTarget.id);
-    this.setState({ activeImgId: event.currentTarget.id });
-    // this.state.data.find(img => this.state.data.id === this.state.activeImgId);
-  this.state.data.filter(data => )
   };
 
-  filteredContacts = () => {
-    const { filter, contacts } = this.state;
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
+  setActiveImgIdx = idx => {
+    this.setState({ activeImgIdx: idx });
   };
-
-  // setActiveImgIdx = idx => {
-  //   console.log(idx);
-  // };
 
   componentDidUpdate(prevProps, prevState) {
     const BASE_URL = 'https://pixabay.com/api/';
@@ -93,6 +83,7 @@ class App extends React.Component {
     const newPage = this.state.page;
 
     if (prevName !== newName) {
+      this.setState({ loading: true });
       fetch(
         `${BASE_URL}?q=${newName}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
@@ -104,9 +95,11 @@ class App extends React.Component {
           return Promise.reject(new Error('Something has gone wrong!'));
         })
         .catch(error => this.setState({ error }))
-        .then(data => this.responceDataInput(data));
+        .then(data => this.responceDataInput(data))
+        .finally(() => this.setState({ loading: false }));
     }
     if (prevPage !== newPage) {
+      this.setState({ loading: true });
       fetch(
         `${BASE_URL}?q=${newName}&page=${currentPage}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
@@ -117,13 +110,22 @@ class App extends React.Component {
           return Promise.reject(new Error('Something has gone wrong!'));
         })
         .catch(error => this.setState({ error }))
-        .then(data => this.paginationDataInput(data));
+        .then(data => this.paginationDataInput(data))
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
   render() {
-    const { searchedName, page, showModal, data, error } = this.state;
-    const { idx } = this.props;
+    const {
+      searchedName,
+      showModal,
+      data,
+      loading,
+      noData,
+      noNewData,
+      error,
+      activeImgIdx,
+    } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.formSubmitHandler} />
@@ -133,16 +135,22 @@ class App extends React.Component {
           data={data}
           error={error}
           showModal={this.toggleModal}
-          // setActiveImgIdx={this.setActiveImgIdx(idx)}
+          activeIdx={this.setActiveImgIdx}
         />
-
-        {data && <Button onClick={this.changePagePagination} />}
-        {/* <Loader /> */}
+        {noData && (
+          <div style={{ fontSize: 24 }}>
+            Sorry, no results were found for your request...
+          </div>
+        )}
+        {loading && <Loader />}
+        {data && !loading && !noData && !noNewData && (
+          <Button onClick={this.changePagePagination} />
+        )}
         {showModal && (
           <Modal onClose={this.toggleModal}>
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"
-              alt="aaa"
+              src={data[activeImgIdx].largeImageURL}
+              alt={data[activeImgIdx].tags}
               className={css.Modal}
             ></img>
           </Modal>
