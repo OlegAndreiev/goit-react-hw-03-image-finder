@@ -4,14 +4,14 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import css from './ImageGallery.module.css';
 
 class ImageGallery extends React.Component {
-  state = {
-    searchedName: this.props.searchedName,
-    page: this.props.page,
+  // state = {
+  //   // searchedName: this.props.searchedName,
+  //   // page: this.props.page,
 
-    data: [],
-    error: null,
-    showModal: true,
-  };
+  //   // data: [],
+  //   // error: null,
+  //   // showModal: true,
+  // };
 
   render() {
     const { data, error } = this.props;
